@@ -2,3 +2,40 @@
   width: 100px; 
   height: 100px;
 }
+
+.msg {
+  position: fixed;
+  bottom: 0;
+  right: 20px;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+
+.msgCard {
+  position: fixed !important;
+  bottom: 0 !important;
+  right: 20px !important;
+  width: 400px;
+}
+
+.cardTitle {
+  background-color: rgb(241, 103, 59);
+  color: white;
+  height: 60px !important;
+}
+
+.orangeColor {
+  background-color: rgb(241, 103, 59) !important;
+  border: none !important;
+}
+
+.msgIcon {
+  font-size: 30px !important;
+  float: right;
+}
+
+.requestDemoForm {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 20px !important;
+}

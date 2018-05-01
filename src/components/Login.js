@@ -1,34 +1,47 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router-dom';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
+import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { fetchUser } from '../actions';
+import {withRouter} from "react-router-dom";
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {name: '', password: '', errMsg:''};
-  }
 
-  onSubmit = e => {
-    e.preventDefault();
-    if(this.state.name === 'username' && this.state.password === 'password') {
-      this.props.loginHandler();
-    } else {
-      this.setState({errMsg: 'Invalid username / password pair'});
+  renderField = (field) => {
+    const { meta: { touched, error } } = field;
+    const inputState = (field) => {
+      if (field.meta.touched && field.meta.error) {
+        console.log(field.meta.error);
+        return 'is-invalid'
+      } else if (field.meta.touched && field.input.value) {
+        return 'is-valid'
+      } else {
+        return ''
+      }
     }
+    return (
+      <FormGroup >
+        <Label>{field.label} <span style={{color: 'red', fontWeight: 'bold'}}>*</span></Label>
+        <Input 
+          type={field.type}
+          placeholder={field.label}
+          {...field.input}
+          className={inputState(field)}
+        />
+        {touched && (error && <span className="invalid-feedback">{error}</span>)}
+      </FormGroup>
+    );
   }
 
-  onChange = e => {
-    let state = this.state;
-    state[e.target.name] = e.target.value;
-    this.setState(state);
+  onSubmit = (values) => {
+    this.props.fetchUser(
+        values, 
+        () => {
+          this.props.history.push('/service');
+        }
+    );
   }
-
-  handleValidation = () => {
-    if(this.state.name === 'username' && this.state.password === 'password') {
-      this.setState({isValid: true});
-    }
-  }
-
 
   render() {
     if (this.props.auth) {
@@ -37,26 +50,63 @@ class Login extends Component {
     } else {
       // User will be redirected to /login if they go any other page before authentication.
       return (
-        <Form onSubmit={this.onSubmit}>
-          <h2>Login Page</h2>
-        
-          <h4 className="text-xs-center bg-danger">{this.state.errMsg}</h4>
-          
-          <FormGroup>
-            <Label>USERNAME</Label>
-            <Input type="text" placeholder="USERNAME" name="name" value={this.state.fName} onChange={this.onChange} required />
-          </FormGroup>
+        <Row style={{marginTop: 100}}>
+          <Col sm="12" md={{ size: 6, offset: 3 }}>
+            <Form onSubmit={this.props.handleSubmit(this.onSubmit)} >
+            
+              <Field
+                label="Email Address"
+                name="email"
+                type="email"
+                component={this.renderField}
+              />
 
-          <FormGroup>
-            <Label>PASSWORD</Label>
-            <Input type="password" placeholder="PASSWORD" name="password" value={this.state.password} onChange={this.onChange} required />
-          </FormGroup>
+              <Field
+                label="Password"
+                name="password"
+                type="password"
+                component={this.renderField}
+              />
 
-          <Button color="primary">Login</Button>
-        </Form>
+              <FormGroup>
+                <Button className="orangeColor" size="lg" block disabled={this.props.invalid || this.props.submitting}>Log In</Button>
+              </FormGroup>
+                    
+            </Form>
+          </Col>
+        </Row>
       );
     }
   }
 };
 
-export default Login;
+
+function validate(values) {
+  const errors = {};
+
+  if (!values.password) {
+    errors.password = "Password Required";
+  }
+
+  if (!values.email) {
+    errors.email = "Email Required";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid Email Address'
+  }
+
+  return errors;
+}
+
+
+function mapStateToProps(state) {
+  return { 
+    
+   };
+}
+
+export default reduxForm({
+  validate,
+	form: 'LoginForm'
+})(
+	withRouter(connect(mapStateToProps, { fetchUser })(Login)
+));

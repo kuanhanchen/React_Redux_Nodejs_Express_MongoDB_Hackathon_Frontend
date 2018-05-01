@@ -1,15 +1,29 @@
 {
-  "name": "hw3-1",
+  "name": "hackathon_frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:3001",
+      "pathRewrite": {
+        "^/api": ""
+      },
+      "changeOrigin": true,
+      "secure": false
+    }
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
-    "reactstrap": "^5.0.0-beta.2"
+    "reactstrap": "^5.0.0-beta.2",
+    "redux": "^4.0.0",
+    "redux-form": "^7.3.0",
+    "redux-promise": "^0.5.3"
   },
   "scripts": {
     "start": "react-scripts start",

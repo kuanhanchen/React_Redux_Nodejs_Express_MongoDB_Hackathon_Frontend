@@ -1,5 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-It's a user list with authentication form. using [Github users API](https://api.github.com/users?per_page=10).
+It's a front-end part of USTSV Hackathon project with authentication.
 
-Implemented React router, setState, props, componentDidMount(), reactstrap, JSX, axios
+Implemented React, Redux, redux-form, react-router-dom, state, setState, props, componentDidMount(), reactstrap, JSX, axios, reducers, actions, action creators, redux-promise
